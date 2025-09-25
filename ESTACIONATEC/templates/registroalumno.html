@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro Alumno - Estacionatec</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #e9c4f7;
+      padding: 25px;
+      font-size: 32px;
+      font-weight: bold;
+      color: #333;
+      border-bottom: none;
+      position: relative;
+    }
+
+    header img {
+      position: absolute;
+      right: 20px;
+      top: 10px;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      background-color: #f0c6f5;
+      padding: 40px;
+      border-radius: 20px;
+      width: 500px; /* más grande */
+    }
+
+    .card h2 {
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    label {
+      text-align: left;
+      margin: 10px 0 5px;
+      font-weight: bold;
+      display: block;
+    }
+
+    input, select {
+      width: 100%; /* ajustado al tamaño del contenedor */
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+      background-color: white;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border-radius: 20px;
+      border: none;
+      background-color: #8a2be2;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #6a0dad;
+    }
+
+    .card p {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .card a {
+      color: #4a00e0;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .card a:hover {
+      text-decoration: underline;
+    }
+    select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #e9c4f7;
+  font-size: 16px;
+  background-color: white;
+  transition: 0.3s;
+}
+
+select:focus {
+  outline: none;
+  border-color: #e9c4f7;
+  background-color: #e9c4f7;
+  
+}
+option {
+  background-color: #e9c4f7;
+  color: #333;
+  padding: 10px;
+}
+
+/* Al pasar el cursor sobre las opciones */
+option:hover {
+  background-color: #a347ba; /* morado fuerte */
+  color: white;
+}
+  </style>
+</head>
+<body>
+  <header>
+    Estacionatec Alumnos
+    <img src="{{ url_for('static', filename='img1.jpg') }}" alt="logo">
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <h2>Registrarse</h2>
+      <form action="/registro/alumno" method="POST">
+        <label>Nombre Completo</label>
+        <input type="text" name="nombre_completo" placeholder="Ingresa tu nombre completo" required>
+	<div class="form-group">
+  	<label for="carrera">Carrera</label>
+	<select name="carrera" id="carrera" required>
+    	  <option value="">-- Selecciona tu carrera --</option>
+    	  <option value="ISC">ISC</option>
+    	  <option value="IM">IM</option>
+    	  <option value="IGE">IGE</option>
+    <option value="IIND">IIND</option>
+  </select>
+</div>
+        <label>Matrícula</label>
+        <input type="text" name="numero_id_estudiante" placeholder="Ej. 221080537" required>
+
+        <label>Correo Electrónico</label>
+        <input type="email" name="correo_electronico" placeholder="juan@example.com" required>
+
+        <label>Nombre de Usuario</label>
+        <input type="text" name="nombre_usuario" placeholder="usuario" required>
+
+        <label>Contraseña</label>
+        <input type="password" name="contraseña" placeholder="Ingresa tu contraseña" required>
+
+        <button type="submit">Registrarse</button>
+      </form>
+      <p>¿Ya tienes cuenta? <a href="/login">Inicia Sesión</a></p>
+    </div>
+  </div>
+</body>
+</html>
+

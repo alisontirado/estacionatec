@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Inicio de Sesión - Estacionatec</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #e9c4f7;
+      padding: 25px;
+      font-size: 32px;
+      font-weight: bold;
+      color: #333;
+      border-bottom: none;
+      position: relative;
+    }
+
+    header img {
+      position: absolute;
+      right: 20px;
+      top: 10px;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      background-color: #f0c6f5;
+      padding: 30px;
+      border-radius: 20px;
+      width: 350px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      text-align: left;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+    }
+
+    button {
+      background: #6a5acd;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background: #483d8b;
+    }
+
+    p {
+      margin-top: 15px;
+    }
+
+    a {
+      color: #6a5acd;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      width: 300px;
+      animation: aparecer 0.3s ease;
+    }
+
+    .modal-content h3 {
+      margin-bottom: 15px;
+    }
+
+    .modal-content button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #f0c6f5;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .modal-content button:hover {
+      background: #483d8b;
+    }
+
+    @keyframes aparecer {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Estacionatec
+    <img src="{{ url_for('static', filename='img1.jpg') }}" alt="logo">
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <h2>Inicio de Sesión</h2>
+      <form action="/login" method="POST">
+        <label>Nombre de Usuario</label>
+        <input type="text" name="nombre_usuario" placeholder="usuario" required>
+
+        <label>Contraseña</label>
+        <input type="password" name="contraseña" placeholder="ingresa tu contraseña" required>
+
+        <button type="submit">Iniciar Sesión</button>
+      </form>
+      <p>¿No tienes cuenta? <a id="openModal">Regístrate</a></p>
+    </div>
+  </div>
+
+    <div class="modal" id="modalRegistro">
+    <div class="modal-content">
+      <h3>¿Eres...?</h3>
+      <button onclick="window.location.href='/registro/alumno'">Alumno</button>
+      <button onclick="window.location.href='/registro/docente'">Docente</button>
+      <button onclick="window.location.href='/registro/vigilancia'">Vigilancia</button>
+      <button onclick="cerrarModal()">Cancelar</button>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById("modalRegistro");
+    const openModal = document.getElementById("openModal");
+
+    openModal.onclick = function() {
+      modal.style.display = "flex";
+    }
+
+    function cerrarModal() {
+      modal.style.display = "none";
+    }
+
+    // Cerrar modal si se da clic fuera del contenido
+    window.onclick = function(event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>
+
+
+
