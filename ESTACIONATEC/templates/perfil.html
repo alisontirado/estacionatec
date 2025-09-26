@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo_pagina }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #f7e6f9;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            margin: 0;
+            color: #444;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .main-container {
+            display: flex;
+            height: calc(100vh - 80px); /* Ajusta según la altura del encabezado */
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: #f7e6f9;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-button {
+            background-color: #d1b5e3;
+            border: none;
+            padding: 15px;
+            text-align: left;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar-button:hover {
+            background-color: #c0a3d0;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-card {
+            background-color: #e0e0e0;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            width: 400px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .user-icon {
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+
+        .card-body p {
+            margin: 10px 0;
+            font-size: 18px;
+            text-align: left;
+        }
+
+        .data-highlight {
+            background-color: #d1b5e3;
+            padding: 2px 8px;
+            border-radius: 5px;
+        }
+
+        .data-highlight-green {
+            background-color: #92e392;
+            padding: 2px 8px;
+            border-radius: 5px;
+        }
+
+        .access-status {
+            background-color: #92e392;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .card-footer {
+            margin-top: 20px;
+        }
+
+        .back-button {
+            background-color: #e0e0e0;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .back-button:hover {
+            background-color: #d4d4d4;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Estacionatec</h1>
+        <div class="header-logo">
+            <img src="{{ url_for('static', filename='parking_logo.png') }}" alt="Logo de Parking">
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <button class="sidebar-button">Scanner</button>
+            <button class="sidebar-button">Perfil</button>
+            <button class="sidebar-button" onclick="window.location.href='{{ url_for('logout') }}';">Cerrar Sesión</button>
+        </aside>
+
+        <main class="content">
+            <div class="info-card">
+                <div class="card-header">
+                    <img src="{{ url_for('static', filename='user_icon.png') }}" alt="Icono de usuario" class="user-icon">
+                </div>
+                
+                <div class="card-body">
+                    <p><strong>Nombre:</strong> <span class="data-highlight">{{ usuario.nombre_completo }}</span></p>
+                    <p><strong>No. Empleado:</strong> <span class="data-highlight">{{ usuario.no_empleado }}</span></p>
+                    <p><strong>Rol:</strong> <span class="data-highlight">{{ usuario.rol }}</span></p>
+                </div>
+            </div>
+            
+            <div class="card-footer">
+                <button class="back-button" onclick="history.back()">Regresar</button>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
