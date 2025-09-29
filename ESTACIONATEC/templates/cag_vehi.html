@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Estacionatec Docentes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #fff;
+    }
+    /* Barra superior */
+    .header {
+      background: #e9c4f7;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: bold;
+      margin: 0;
+    }
+    .profile-icon {
+      width: 45px;
+      height: 45px;
+      background: #ddd;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      cursor: pointer;
+    }
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: #e9c4f7;
+      padding: 20px;
+      height: calc(100vh - 70px);
+      float: left;
+      position: relative;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar li {
+      padding: 10px;
+      border-radius: 20px;
+      margin-bottom: 5px;
+      cursor: pointer;
+      background: #fff;
+      transition: background 0.2s;
+    }
+    /* Hover solo en los que NO son activos */
+    .sidebar li:hover:not(.active) {
+      background: #f1c2ec;
+    }
+    /* La opción activa siempre marcada */
+    .sidebar .active {
+      background: #d89ae6;
+      font-weight: bold;
+    }
+    .black-circle {
+      width: 35px;
+      height: 35px;
+      background: black;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+    }
+    /* Main */
+    .main {
+      margin-left: 240px;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: #e6e6e6;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    .field {
+      margin-bottom: 15px;
+    }
+    .field label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 6px;
+    }
+    input[type="text"], input[type="file"], select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .btn {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-right: 8px;
+    }
+    .btn-outline {
+      background: #fff;
+      border: 1px solid #ccc;
+    }
+    .btn-primary {
+      background: #f1c2ec;
+    }
+    .btn-danger {
+      background: #ff6b6b;
+      color: white;
+      border-radius: 6px;
+      margin-top: 6px;
+    }
+    .file-preview img {
+      max-width: 180px;
+      border-radius: 8px;
+      display: block;
+      margin-top: 10px;
+    }
+    #qr-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Encabezado superior -->
+  <div class="header">
+    <h1>Estacionatec Docentes</h1>
+    <div class="profile-icon">👤</div>
+  </div>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <ul>
+      <li>Perfil</li>
+      <li>Historial de pagos</li>
+      <li class="active">Carga de Vehículo</li>
+      <li>Pago de Tarjeton</li>
+      <li>Cerrar Sesión</li>
+    </ul>
+    <div class="black-circle"></div>
+  </div>
+  <!-- Main -->
+  <div class="main">
+    <h2>Carga de Vehículo</h2>
+    <div class="card">
+      <!-- FORMULARIO -->
+      <form id="formulario">
+        <!-- Tipo -->
+        <div class="field">
+          <label for="tipo">Tipo</label>
+          <select name="tipo" id="tipo" required>
+            <option value="">Seleccione...</option>
+            <option value="Moto">Moto</option>
+            <option value="Auto">Auto</option>
+            <option value="Camioneta">Camioneta</option>
+          </select>
+        </div>
+        <!-- Placa -->
+        <div class="field">
+          <label for="placa">Placa</label>
+          <input type="text" name="placa" id="placa" placeholder="Obligatorio" required>
+        </div>
+        <!-- Nombre -->
+        <div class="field">
+          <label for="nombre">Nombre del conductor</label>
+          <input type="text" name="nombre" id="nombre" placeholder="Nombre completo" required>
+        </div>
+        <!-- Foto del Vehículo -->
+        <div class="field">
+          <label for="vehiculo">Foto del Vehículo</label>
+          <input type="file" name="vehiculo" id="vehiculo" accept="image/*" required>
+        </div>
+        <!-- Identificación oficial -->
+        <div class="field">
+          <label for="id">Identificación oficial</label>
+          <input type="file" name="id" id="id" accept="image/*" required>
+        </div>
+        <!-- Tarjeta de circulación -->
+        <div class="field">
+          <label for="tarjeta">Tarjeta de Circulación</label>
+          <input type="file" name="tarjeta" id="tarjeta" accept="image/*" required>
+        </div>
+        <!-- Botones -->
+        <div class="field">
+          <button type="submit" class="btn btn-primary">Guardar datos</button>
+          <button type="reset" class="btn btn-outline">Limpiar</button>
+        </div>
+      </form>
+      <div id="qr-container">
+        <img id="qr-image" src="" alt="Código QR">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('formulario');
+    const qrImage = document.getElementById('qr-image');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      fetch('/guardar', {
+        method: 'POST',
+        body: formData,
+      })
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = URL.createObjectURL(blob);
+        qrImage.src = url;
+      })
+      .catch((error) => console.error('Error:', error));
+    });
+  </script>
+</body>
+</html>
