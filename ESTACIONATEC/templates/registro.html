@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro Usuario - Estacionatec</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #f2f2f2;
+    }
+
+    .card {
+      background-color: #23c6dcff;
+      border-radius: 20px;
+      width: 1200px;
+      display: flex;
+      overflow: hidden;
+      filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4));
+    }
+
+    /* Contenedor de la imagen y texto */
+    .card-image {
+      flex: 1.5;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background: #23c6dcff;
+      
+    }
+
+    .card-image img {
+      width: 90%;
+      height: auto;
+      border-radius: 15px;
+       filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4));
+      
+    }
+
+    card-image img:hover {
+      transform: scale(1.03);
+    }
+
+      .overlay-text {
+      position: absolute;
+      bottom: 630px;
+      left: 1px;
+      background-color: rgba(0, 0, 64, 0.8);
+      color: white;
+      font-size: 38px;
+      font-weight: bold;
+      padding: 2px 30px;
+      border-radius: 15px;
+      width: 60%;
+      line-height: 1.3;
+    }
+
+   
+
+    /* Formulario */
+    .card-form {
+      flex: 1;
+      padding: 35px;
+      background-color: rgba(0,0,0,0.1);
+      color: white;
+    }
+
+    .card-form h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 25px;
+      background-color: #0662f6;
+      color: white;
+      font-size: 16px;
+      margin-top: 18px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0047b3;
+      transform: scale(1.03);
+    }
+
+    .card-form p {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .card-form a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .card-form a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <!-- Imagen con texto superpuesto -->
+    <div class="card-image">
+      <img src="{{ url_for('static', filename='fondo1.jpg') }}" alt="Imagen">
+      <div class="overlay-text">Bienvenido a  Estacionatec</div>
+    </div>
+
+    <!-- Formulario -->
+    <div class="card-form">
+      <h2>Crear Cuenta</h2>
+      <form action="/registro_usuario" method="POST">
+        <label>Nombre de Usuario</label>
+        <input type="text" name="nombre_usuario" placeholder="Ingresa tu nombre de usuario" required>
+
+        <label>Contraseña</label>
+        <input type="password" name="contraseña" placeholder="Ingresa tu contraseña" required>
+
+        <label>Tipo de Usuario</label>
+        <select name="tipo_usuario" required>
+          <option value="">-- Selecciona --</option>
+          <option value="TRUE">Estudiante</option>
+          <option value="FALSE">Profesor/Seguridad</option>
+        </select>
+
+        <label>Nombre Completo</label>
+        <input type="text" name="nombre_completo" placeholder="Ingresa tu nombre completo" required>
+
+        <label>Correo Electrónico</label>
+        <input type="email" name="correo_electronico" placeholder="juan@example.com" required>
+
+        <label>Teléfono</label>
+        <input type="text" name="telefono" placeholder="5512345678">
+
+        <label>RFC o Número de Control</label>
+        <input type="text" name="rfc_num_control" placeholder="221080537 o GOTA010253MA7" required>
+
+        <label for="carrera">Carrera (Solo Estudiantes)</label>
+        <select name="carrera" id="carrera">
+          <option value="">-- Selecciona tu carrera --</option>
+          <option value="ISC">ISC</option>
+          <option value="IM">IM</option>
+          <option value="IGE">IGE</option>
+          <option value="IIND">IIND</option>
+        </select>
+
+        <button type="submit">Registrarse</button>
+      </form>
+      <p>¿Ya tienes cuenta? <a href="/">Inicia Sesión</a></p>
+    </div>
+  </div>
+</body>
+</html>
