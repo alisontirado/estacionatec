@@ -105,17 +105,12 @@
     .vehiculo-info {
       margin-top: 20px;
       background: #fff;
-      border-radius: 10px;
+      border-radius: 15px;
       padding: 15px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       width: 350px;
       text-align: center;
       animation: aparecer 0.5s ease;
-    }
-
-    @keyframes aparecer {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
     }
 
     .vehiculo-info img {
@@ -132,6 +127,11 @@
     .estado-inactivo {
       color: red;
       font-weight: bold;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
     }
   </style>
 </head>
@@ -150,10 +150,13 @@
     <!-- 🔸 Contenido principal -->
     <div class="main-content">
       <div id="qr-reader"></div>
+
       <div class="footer">
         <button onclick="stopScanner()"> Detener Cámara</button>
       </div>
+
       <p id="qr-result"></p>
+
       <div id="vehiculo-info"></div>
     </div>
   </div>
@@ -189,8 +192,8 @@
       startScanner();
     }
 
-    function obtenerInformacion(codigo) {
-      fetch(`/obtener_info/${codigo}`)
+    function obtenerInformacion(placa) {
+      fetch(`/obtener_info/${placa}`)
         .then(response => response.json())
         .then(data => {
           if (data.error) {
@@ -201,16 +204,14 @@
               <div class="vehiculo-info">
                 <img src="${data.imagen_vehiculo}" alt="Vehículo">
                 <img src="${data.imagen_conductor}" alt="Conductor">
-                <p><strong>Placas:</strong> ${data.placas}</p>
-                <p><strong>Modelo:</strong> ${data.modelo}</p>
+                <p><strong>Placa:</strong> ${data.placas}</p>
+                <p><strong>Tipo de vehículo:</strong> ${data.modelo}</p>
                 <p><strong>Estado:</strong> <span class="${data.estado === 'Activo' ? 'estado-activo' : 'estado-inactivo'}">${data.estado}</span></p>
               </div>
             `;
           }
         })
-        .catch(err => {
-          console.error("Error al obtener la información:", err);
-        });
+        .catch(err => console.error("Error al obtener la información:", err));
     }
 
     window.onload = startScanner;
@@ -218,4 +219,3 @@
 
 </body>
 </html>
-
