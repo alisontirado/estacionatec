@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ titulo_pagina }}</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       font-family: "Segoe UI", Arial, sans-serif;
@@ -18,14 +16,12 @@
       height: 100vh;
     }
 
-    /* Contenedor general */
     .main-container {
       display: flex;
       flex: 1;
       min-height: 100vh;
     }
 
-    /* Barra lateral */
     .sidebar {
       width: 250px;
       background-color: #342b4f;
@@ -57,11 +53,8 @@
       gap: 10px;
     }
 
-    .sidebar button:hover {
-      background-color: #5b3dafff;
-    }
+    .sidebar button:hover { background-color: #5b3dafff; }
 
-    /* Contenido principal */
     .content {
       flex-grow: 1;
       display: flex;
@@ -109,15 +102,8 @@
         justify-content: space-around;
         padding: 15px;
       }
-
-      .content {
-        padding: 20px;
-      }
-
-      .overlay-text {
-        font-size: 24px;
-        padding: 10px 15px;
-      }
+      .content { padding: 20px; }
+      .overlay-text { font-size: 24px; padding: 10px 15px; }
     }
   </style>
 </head>
@@ -126,19 +112,20 @@
     <aside class="sidebar">
       <h3>Menú</h3>
       <button onclick="window.location.href='/miperfil'">👤 Perfil</button>
-      <button onclick="'window.location.href='/resumen/pago'">💳📜 Historial de pagos</button>
-      <button onclick="'window.location.href='/carga/vehiculo'">📤Carga de Vehículo</button>
-      <button onclick="'window.location.href='/pago/vehiculo'">💳 Pago de Tarjeton</button>
-      <button onclick="'window.location.href='/recibo'">🧾 Vaucher</button>
+      <button onclick="window.location.href='/resumen/pago'">💳📜 Historial de pagos</button>
+      <button onclick="window.location.href='/carga/vehiculo'">📤Carga de Vehículo</button>
+      <button onclick="window.location.href='/pago/vehiculo'">💳 Pago de Tarjeton</button>
+      <button onclick="window.location.href='/recibo'">🧾 Voucher</button>
       <button onclick="window.location.href='{{ url_for('logout') }}';">🔒 Cerrar Sesión</button>
     </aside>
 
     <div class="content">
       <div class="card-image">
         <img src="{{ url_for('static', filename='fondo1.jpg') }}" alt="Imagen de fondo">
-        <div class="overlay-text">Bienvenido a EstacionaTec</div>
+        <div class="overlay-text">
+          Bienvenido {{ usuario.nombre_usario}} a Estacionatec
+        </div>
       </div>
     </div>
   </div>
-</body>
-</html>
+
