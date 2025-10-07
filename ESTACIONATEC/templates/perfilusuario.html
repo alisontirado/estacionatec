@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Estacionatec Docentes</title>
   <style>
     * { box-sizing: border-box; }
@@ -128,24 +127,27 @@
     <!-- Contenido principal -->
     <div class="content">
       <div class="user-card">
-        {% if usuario.rol == 'alumno' %}
+        {% if usuario.tipo_usuario %}
           <img src="{{ usuario.foto_url }}" class="user-photo" alt="Foto del alumno">
           <div class="info">
-            <p><b>Nombre:</b> {{ usuario.nombre }}</p>
+            <p><b>Nombre:</b> {{ usuario.nombres }} {{ usuario.apellido_paterno }} {{ usuario.apellido_materno }}</p>
             <p><b>Carrera:</b> {{ usuario.carrera }}</p>
-            <p><b>Matrícula:</b> {{ usuario.matricula }}</p>
-          </div>
-        {% elif usuario.rol == 'maestro' %}
-          <img src="{{ usuario.foto_url }}" class="user-photo" alt="Foto del maestro">
-          <div class="info">
-            <p><b>Nombre:</b> {{ usuario.nombre }}</p>
-            <p><b>RFC:</b> {{ usuario.rfc }}</p>
+            <p><b>Matrícula:</b> {{ usuario.num_control }}</p>
+            <p><b>Correo:</b> {{ usuario.correo_electronico }}</p>
+            <p><b>Teléfono:</b> {{ usuario.telefono }}</p>
           </div>
         {% else %}
-          <p>No hay información disponible</p>
+          <img src="{{ usuario.foto_url }}" class="user-photo" alt="Foto del maestro">
+          <div class="info">
+            <p><b>Nombre:</b> {{ usuario.nombres }} {{ usuario.apellido_paterno }} {{ usuario.apellido_materno }}</p>
+            <p><b>RFC:</b> {{ usuario.RFC }}</p>
+            <p><b>Correo:</b> {{ usuario.correo_electronico }}</p>
+            <p><b>Teléfono:</b> {{ usuario.telefono }}</p>
+          </div>
         {% endif %}
       </div>
     </div>
   </div>
 </body>
 </html>
+
