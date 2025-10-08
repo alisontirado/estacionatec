@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ titulo_pagina }}</title>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background-color: #eaf7ff;
+    }
+
+    .layout {
+      display: flex;
+      flex: 1;
+    }
+
+    /* 🔹 Barra lateral */
+    .sidebar {
+      width: 250px;
+      background-color: #342b4f;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sidebar h3 {
+      text-align: center;
+      color: #cfc6f3;
+      margin-bottom: 20px;
+      font-weight: normal;
+    }
+
+    .sidebar button {
+      background-color: #5a4c79;
+      border: none;
+      color: #fff;
+      text-align: left;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: background-color 0.3s ease, color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar button:hover {
+      background-color: #5b3dafff;
+    }
+
+    /* 🔹 Contenido principal */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    #qr-reader {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      background: white;
+    }
+
+    .footer {
+      margin-top: 20px;
+    }
+
+    .footer button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      background-color: #81759cff;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .footer button:hover {
+      background-color: #6d2e85ff;
+      color: white;
+    }
+
+    /* 🔹 Resultado del QR */
+    #qr-result {
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+      color: #333;
+    }
+
+    /* 🔹 Información del vehículo */
+    .vehiculo-info {
+      margin-top: 20px;
+      background: #fff;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      width: 350px;
+      text-align: center;
+      animation: aparecer 0.5s ease;
+    }
+
+    .vehiculo-info img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .estado-activo {
+      color: green;
+      font-weight: bold;
+    }
+
+    .estado-inactivo {
+      color: red;
+      font-weight: bold;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="layout">
+    <!-- 🔸 Menú lateral -->
+    <div class="sidebar">
+      <h3>Menú</h3>
+      <button onclick="resetScanner()">🔄 Reiniciar Scanner</button>
+      <button onclick="window.location.href='/miperfil'">👤 Perfil</button>
+      <button onclick="window.location.href='{{ url_for('logout') }}'">🔒 Cerrar Sesión</button>
+      <button onclick="window.location.href='/perfil_usuario'">↩ Atrás</button>
+    </div>
+
+    <!-- 🔸 Contenido principal -->
+    <div class="main-content">
+      <div id="qr-reader"></div>
+
+      <div class="footer">
+        <button onclick="stopScanner()"> Detener Cámara</button>
+      </div>
+
+      <p id="qr-result"></p>
+
+      <div id="vehiculo-info"></div>
+    </div>
+  </div>
+
+  <script>
+    let html5QrcodeScanner;
+
+    function startScanner() {
+      html5QrcodeScanner = new Html5Qrcode("qr-reader");
+      html5QrcodeScanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: 250 },
+        qrCodeMessage => {
+          document.getElementById('qr-result').innerText = `Código detectado: ${qrCodeMessage}`;
+          obtenerInformacion(qrCodeMessage);
+          stopScanner();
+        },
+        () => {}
+      ).catch(err => console.error("Error al iniciar el escáner:", err));
+    }
+
+    function stopScanner() {
+      if (html5QrcodeScanner) {
+        html5QrcodeScanner.stop()
+          .then(() => { console.log("Escáner detenido"); })
+          .catch(err => console.error("Error al detener el escáner:", err));
+      }
+    }
+
+    function resetScanner() {
+      document.getElementById('qr-result').innerText = "";
+      document.getElementById('vehiculo-info').innerHTML = "";
+      startScanner();
+    }
+
+    function obtenerInformacion(placa) {
+      fetch(`/obtener_info/${placa}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            document.getElementById('vehiculo-info').innerHTML =
+              `<p style="color:red;">${data.error}</p>`;
+          } else {
+            document.getElementById('vehiculo-info').innerHTML = `
+              <div class="vehiculo-info">
+                <img src="${data.imagen_vehiculo}" alt="Vehículo">
+                <img src="${data.imagen_conductor}" alt="Conductor">
+                <p><strong>Placa:</strong> ${data.placas}</p>
+                <p><strong>Tipo de vehículo:</strong> ${data.modelo}</p>
+                <p><strong>Estado:</strong> <span class="${data.estado === 'Activo' ? 'estado-activo' : 'estado-inactivo'}">${data.estado}</span></p>
+              </div>
+            `;
+          }
+        })
+        .catch(err => console.error("Error al obtener la información:", err));
+    }
+
+    window.onload = startScanner;
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Inicio de Sesión - EstacionaTec</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #eaf7ff;
+    }
+
+    .card {
+     background-color: #23c6dcff;
+      border-radius: 20px;
+      width: 1200px;
+      display: flex;
+      overflow: hidden;
+      filter: drop-shadow(0 8px 15px rgba(0,0,0,0.4));
+    }
+
+    /* Sección de la imagen */
+    .card-image {
+      flex: 1.4;
+      position: relative;
+      background-color: #23c6dcff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .card-image img {
+      width: 80%;
+      height: auto;
+      border-radius: 15px;
+      filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.4));
+      
+    }
+
+
+    .overlay-text {
+      position: absolute;
+      bottom: 350px;
+      left: 1px;
+      background-color: rgba(0, 0, 64, 0.8);
+      color: white;
+      font-size: 38px;
+      font-weight: bold;
+      padding: 2px 30px;
+      border-radius: 15px;
+      width: 60%;
+      line-height: 1.3;
+    }
+
+    /* Sección del formulario */
+    .card-form {
+      flex: 1;
+      background-color: rgba(0,0,0,0.1);
+      padding: 50px 40px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .card-form h2 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 25px;
+      background-color: #0662f6;
+      color: white;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0047b3;
+      transform: scale(1.03);
+    }
+
+    p {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+
+<body>
+  <div class="card">
+    <div class="card-image">
+      <img src="{{ url_for('static', filename='fondo1.jpg') }}" alt="Imagen de fondo">
+      <div class="overlay-text">Bienvenido a EstacionaTec</div>
+    </div>
+
+    <div class="card-form">
+      <h2>Inicio de Sesión</h2>
+      <form action="/perfil_usuario" method="GET">
+        <label>Nombre de Usuario</label>
+        <input type="text" name="nombre_usuario" placeholder="Ingresa tu usuario" required>
+
+        <label>Contraseña</label>
+        <input type="password" name="contraseña" placeholder="Ingresa tu contraseña" required>
+
+        <button type="submit" >Iniciar Sesión</button>
+      </form>
+      <p>¿No tienes cuenta? <a href="/registro_usuario">Regístrate aquí</a></p>
+    </div>
+  </div>
+</body>
+</html>
+
+
+

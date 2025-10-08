@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Estacionatec Docentes</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      background-color: #eaf7ff;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    /* Contenedor general */
+    .main-container {
+      display: flex;
+      flex: 1;
+      min-height: 100vh;
+    }
+
+    /* Barra lateral */
+    .sidebar {
+      width: 250px;
+      background-color: #342b4f;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sidebar h3 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: normal;
+      color: #cfc6f3;
+    }
+
+    .sidebar button {
+      background-color: #5a4c79;
+      border: none;
+      color: #fff;
+      text-align: left;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: background-color 0.3s ease, color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar button:hover {
+      background-color: #5b3dafff;
+    }
+
+    /* Contenido principal */
+    .content {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+    }
+
+    /* Tarjeta de usuario */
+    .user-card {
+      background-color: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .user-card img.user-photo {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #8a2be2;
+      margin-bottom: 20px;
+    }
+
+    .user-card .info p {
+      font-size: 16px;
+      line-height: 1.8;
+      margin: 5px 0;
+    }
+
+    @media (max-width: 600px) {
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 15px;
+      }
+
+      .user-card img.user-photo {
+        width: 120px;
+        height: 120px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <!-- Barra lateral -->
+    <aside class="sidebar">
+      <h3>Menú</h3>
+      <button onclick="window.location.href='/miperfil'">👤 Perfil</button>
+      <button onclick="window.location.href='/resumen/pago'">💳📜 Historial de pagos</button>
+      <button onclick="window.location.href='/carga/vehiculo'">📤Carga de Vehículo</button>
+      <button onclick="window.location.href='/pago/vehiculo'">💳 Pago de Tarjeton</button>
+      <button onclick="window.location.href='/recibo'">🧾 Voucher</button>
+      <button onclick="window.location.href='{{ url_for('logout') }}';">🔒 Cerrar Sesión</button>
+    </aside>
+
+    <!-- Contenido principal -->
+    <div class="content">
+      <div class="user-card">
+        {% if usuario.tipo_usuario %}
+          <img src="{{ usuario.foto_url }}" class="user-photo" alt="Foto del alumno">
+          <div class="info">
+            <p><b>Nombre:</b> {{ usuario.nombres }} {{ usuario.apellido_paterno }} {{ usuario.apellido_materno }}</p>
+            <p><b>Carrera:</b> {{ usuario.carrera }}</p>
+            <p><b>Matrícula:</b> {{ usuario.num_control }}</p>
+            <p><b>Correo:</b> {{ usuario.correo_electronico }}</p>
+            <p><b>Teléfono:</b> {{ usuario.telefono }}</p>
+          </div>
+        {% else %}
+          <img src="{{ usuario.foto_url }}" class="user-photo" alt="Foto del maestro">
+          <div class="info">
+            <p><b>Nombre:</b> {{ usuario.nombres }} {{ usuario.apellido_paterno }} {{ usuario.apellido_materno }}</p>
+            <p><b>RFC:</b> {{ usuario.RFC }}</p>
+            <p><b>Correo:</b> {{ usuario.correo_electronico }}</p>
+            <p><b>Teléfono:</b> {{ usuario.telefono }}</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
