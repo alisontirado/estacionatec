@@ -7,62 +7,45 @@
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      background: #fff;
+      background: #eaf7ff; /* Fondo azul claro */
     }
-    /* Barra superior */
-    .header {
-      background: #e9c4f7;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .header h1 {
-      font-size: 28px;
-      font-weight: bold;
-      margin: 0;
-    }
-    .profile-icon {
-      width: 45px;
-      height: 45px;
-      background: #ddd;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      cursor: pointer;
-    }
+
     /* Sidebar */
     .sidebar {
       width: 220px;
-      background: #e9c4f7;
+      background: #342b4f; /* Morado oscuro */
       padding: 20px;
-      height: calc(100vh - 70px);
+      height: 100vh;
       float: left;
       position: relative;
+      color: white;
     }
+
     .sidebar ul {
       list-style: none;
       padding: 0;
     }
+
     .sidebar li {
       padding: 10px;
       border-radius: 20px;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
       cursor: pointer;
-      background: #fff;
-      transition: background 0.2s;
+      background: rgba(255, 255, 255, 0.1);
+      transition: background 0.3s, transform 0.2s;
       font-weight: 600;
     }
+
     .sidebar li:hover:not(.active) {
-      background: #f1c2ec;
+      background: #5b3daf; /* Hover violeta */
+      transform: scale(1.03);
     }
+
     .sidebar .active {
-      background: #d89ae6;
+      background: #5a4c79; /* Morado medio */
       font-weight: bold;
-      color: white;
     }
+
     .black-circle {
       width: 35px;
       height: 35px;
@@ -72,38 +55,50 @@
       bottom: 20px;
       left: 20px;
     }
+
     /* Main */
     .main {
       margin-left: 240px;
       padding: 20px;
     }
+
     h2 {
       text-align: center;
       font-size: 22px;
       font-weight: bold;
       margin-bottom: 20px;
+      color: #342b4f;
     }
+
+    /* Tarjeta */
     .card {
-      background: #e6e6e6;
-      border-radius: 12px;
-      padding: 20px;
+      background: #ffffff; /* Blanca */
+      border-radius: 16px;
+      padding: 24px;
       max-width: 800px;
       margin: auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Sombra suave */
     }
+
     .field {
       margin-bottom: 15px;
     }
+
     .field label {
       font-weight: bold;
       display: block;
       margin-bottom: 6px;
+      color: #342b4f;
     }
+
     input[type="text"], input[type="file"], select {
       width: 100%;
       padding: 8px;
       border: 1px solid #ccc;
       border-radius: 6px;
     }
+
+    /* Botones */
     .btn {
       padding: 8px 14px;
       border: none;
@@ -111,18 +106,30 @@
       cursor: pointer;
       margin-right: 8px;
       font-weight: bold;
+      transition: background 0.3s, transform 0.2s;
     }
+
     .btn-outline {
       background: #fff;
       border: 1px solid #ccc;
+      color: #342b4f;
     }
+
     .btn-primary {
-      background: #f1c2ec;
+      background: #5a4c79; /* Morado medio */
+      color: white;
     }
+
+    .btn-primary:hover {
+      background: #5b3daf; /* Hover violeta */
+      transform: scale(1.05);
+    }
+
     #qr-container {
       text-align: center;
       margin-top: 20px;
     }
+
     #qr-container img {
       border: 4px solid #fff;
       border-radius: 8px;
@@ -131,12 +138,6 @@
   </style>
 </head>
 <body>
-  <!-- Encabezado superior -->
-  <div class="header">
-    <h1>Estacionatec Docentes</h1>
-    <div class="profile-icon">👤</div>
-  </div>
-
   <!-- Sidebar -->
   <div class="sidebar">
     <ul>

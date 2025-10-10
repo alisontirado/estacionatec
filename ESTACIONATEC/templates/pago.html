@@ -2,126 +2,92 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Estacionatec Alumnos</title>
+  <title>Historial de Pagos - EstacionaTec Alumnos</title>
   <style>
+    * { box-sizing: border-box; }
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: "Segoe UI", Arial, sans-serif;
       margin: 0;
-      padding: 0;
-      background-color: #fff;
-    }
-
-header {
-  display: flex;
-  justify-content: space-between; 
-  align-items: center;            
-  background-color: #e9c4f7;
-  padding: 15px;
-  font-size: 28px;
-  font-weight: bold;
-  color: #333;
-}
-
-header a img {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-
-    .main {
+      background-color: #eaf7ff;
       display: flex;
+      height: 100vh;
+      color: #333;
     }
 
     /* Menú lateral */
     .sidebar {
-      width: 200px;
-      background-color: #e9c4f7;
-      padding-top: 20px;
-      border-right: 1px solid #ccc;
-      border-bottom-left-radius: 30px;
-      height: calc(100vh - 70px);
+      width: 250px;
+      background-color: #342b4f;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .sidebar button {
-      display: block;
-      width: 90%;
-      margin: 10px auto;
-      padding: 10px;
+      background-color: #5a4c79;
       border: none;
-      border-radius: 20px;
-      background-color: #fff;
-      font-size: 14px;
+      color: #fff;
       text-align: left;
+      padding: 12px 20px;
+      font-size: 16px;
       cursor: pointer;
-      transition: background-color 0.3s;
+      border-radius: 10px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    /* Hover general */
     .sidebar button:hover {
-      background-color: #f8dff9;
+      background-color: #5b3daf;
+      transform: translateY(-2px);
     }
 
-    /* Botón activo (página seleccionada) */
     .sidebar button.active {
-      background-color: #e9c4f7;
-      color: #333;
+      background-color: #8a2be2;
       font-weight: bold;
-    }
-
-    /* Hover sobre botón activo: quita temporalmente el marcado */
-    .sidebar button.active:hover {
-      background-color: #f8dff9;
-      color: #333;
     }
 
     /* Contenido */
     .content {
       flex: 1;
-      padding: 20px;
+      padding: 40px 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-y: auto;
     }
 
     .content h2 {
-      text-align: center;
-      margin-bottom: 20px;
+      color: #342b4f;
+      margin-bottom: 25px;
+      font-size: 24px;
     }
 
+    /* Lista de pagos */
     .payment-list {
-      width: 90%;
-      margin: 0 auto;
+      width: 100%;
+      max-width: 700px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
 
     .payment-item {
-      background-color: #d3d3d3;
+      background-color: #fff;
       border-radius: 20px;
-      padding: 12px 20px;
-      margin: 10px 0;
+      padding: 16px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
     }
 
-    .payment-item:nth-child(even) {
-      background-color: #e5e5e5;
-    }
-
-    .print-icon {
-      width: 30px;
-      height: 30px;
-      background-color: #333;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-    }
-
-    .print-icon::before {
-      content: "\1F5B6"; /* ícono de impresora */
-      color: white;
-      font-size: 20px;
+    .payment-item:hover {
+      transform: translateY(-3px);
     }
 
     .info {
@@ -130,50 +96,109 @@ header a img {
       gap: 4px;
     }
 
+    .info strong {
+      color: #342b4f;
+    }
+
     .info small {
-      font-weight: normal;
-      color: #444;
+      color: #555;
+    }
+
+    .print-icon {
+      width: 36px;
+      height: 36px;
+      background-color: #5a4c79;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .print-icon::before {
+      content: "\1F5B6";
+      color: white;
+      font-size: 20px;
+    }
+
+    .print-icon:hover {
+      background-color: #5b3daf;
+    }
+
+    /* Responsivo */
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 15px;
+      }
+
+      .sidebar button {
+        flex: 1;
+        text-align: center;
+      }
+
+      .content {
+        padding: 25px 15px;
+      }
+
+      .payment-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .print-icon {
+        align-self: flex-end;
+      }
     }
   </style>
 </head>
 <body>
- <header>
-    Estacionatec Alumnos
-    <!-- Imagen personalizada -->
-    <img src="{{ url_for('static', filename='img1.jpg') }}" alt="logo">
-  </header>
+  <div class="sidebar">
+    <button>Perfil</button>
+    <button class="active">Historial de Pagos</button>
+    <button>Carga de Vehículo</button>
+    <button>Pago de Tarjetón</button>
+    <button>Cerrar Sesión</button>
+  </div>
 
-  <div class="main">
-    <!-- Menú lateral -->
-    <div class="sidebar">
-      <button onclick="window.location.href='{{ url_for('perfil') }}'">Perfil</button>
-      <button class="active" onclick="window.location.href='{{ url_for('pago') }}'">Historial de pagos</button>
-      <button onclick="window.location.href='{{ url_for('carga_vehiculo') }}'">Carga de Vehículo</button>
-      <button onclick="window.location.href='{{ url_for('pago_tarjeton') }}'">Pago de Tarjetón</button>
-      <button onclick="window.location.href='{{ url_for('logout') }}'">Cerrar Sesión</button>
-    </div>
+  <div class="content">
+    <h2>Historial de Pagos</h2>
+    <div class="payment-list">
+      <div class="payment-item">
+        <div class="info">
+          <strong>Tarjetón Semestral</strong> - $150.00 MXN
+          <small>Recibo: 0012345</small>
+          <small>Fecha: 09/10/2025</small>
+        </div>
+        <a href="recibo1.pdf" download class="print-icon"></a>
+      </div>
 
-    <!-- Contenido -->
-    <div class="content">
-      <h2>Historial de Pagos</h2>
-      <div class="payment-list">
-        {% for recibo, concepto, cantidad, fecha, archivo in pagos %}
-          <div class="payment-item">
-            <div class="info">
-              {{ concepto }} - ${{ cantidad }}
-              <small>Recibo: {{ recibo }}</small>
-              <small>Fecha: {{ fecha.strftime("%d/%m/%Y") }}</small>
-            </div>
-            {% if archivo %}
-              <a href="{{ url_for('static', filename=archivo) }}" download class="print-icon"></a>
-            {% endif %}
-          </div>
-        {% else %}
-          <p style="text-align:center; color: gray;">No tienes pagos registrados.</p>
-        {% endfor %}
+      <div class="payment-item">
+        <div class="info">
+          <strong>Estacionamiento Diario</strong> - $20.00 MXN
+          <small>Recibo: 0012346</small>
+          <small>Fecha: 08/10/2025</small>
+        </div>
+        <a href="recibo2.pdf" download class="print-icon"></a>
+      </div>
+
+      <div class="payment-item">
+        <div class="info">
+          <strong>Tarjetón Mensual</strong> - $50.00 MXN
+          <small>Recibo: 0012347</small>
+          <small>Fecha: 07/10/2025</small>
+        </div>
+        <a href="recibo3.pdf" download class="print-icon"></a>
       </div>
     </div>
   </div>
 </body>
 </html>
-

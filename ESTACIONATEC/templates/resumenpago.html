@@ -6,48 +6,58 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
+      background-color: #eaf7ff; /* Fondo azul claro */
       margin: 0;
       padding: 0;
+      color: #342b4f;
     }
 
     .container {
       width: 80%;
-      margin: 30px auto;
-      background-color: #e5e5e5;
-      padding: 20px;
-      border-radius: 15px;
+      margin: 40px auto;
+      background-color: #ffffff; /* Tarjeta blanca */
+      padding: 30px;
+      border-radius: 16px; /* Bordes redondeados */
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave */
     }
 
     h2 {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      color: #342b4f;
+      font-size: 24px;
     }
 
     ul {
       list-style-type: none;
       padding: 0;
+      margin: 0;
     }
 
     ul li {
-      margin: 10px 0;
+      margin: 12px 0;
       font-size: 16px;
+      padding: 6px 0;
+      border-bottom: 1px solid #ddd;
     }
 
     .btn-print {
       display: block;
       width: 200px;
-      margin: 20px auto;
-      padding: 10px;
+      margin: 30px auto 0;
+      padding: 12px;
       text-align: center;
-      background-color: #6c63ff;
+      background-color: #5a4c79; /* Morado medio */
       color: white;
-      border-radius: 10px;
+      border-radius: 25px;
       text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s, transform 0.2s;
     }
 
     .btn-print:hover {
-      background-color: #5548d4;
+      background-color: #5b3daf; /* Hover violeta */
+      transform: scale(1.05);
     }
   </style>
 </head>
@@ -56,16 +66,13 @@
     <h2>Recibo de Pago</h2>
     <p>Puedes presentar este recibo de pago a tu institución para cualquier aclaración o si así te lo requieren.</p>
     <ul>
-      <li><b>Concepto de Pago:</b> {{ pago[0] }}</li>
-      <li><b>Monto pagado:</b> ${{ "%.2f"|format(pago[1]) }} MXN</li>
-      <li><b>Número de recibo:</b> {{ pago[3] }}</li>
-      <li><b>Fecha y hora de pago:</b> {{ pago[2].strftime("%Y-%m-%d %H:%M:%S") }}</li>
+      <li><b>Concepto de Pago:</b> Tarjetón Docente</li>
+      <li><b>Monto pagado:</b> $150.00 MXN</li>
+      <li><b>Número de recibo:</b> 123456789</li>
+      <li><b>Fecha y hora de pago:</b> 2025-10-09 14:35:22</li>
     </ul>
 
-    {% if pago[5] %}
-      <a href="{{ url_for('static', filename=pago[5]) }}" download class="btn-print">Descargar comprobante</a>
-    {% endif %}
+    <a href="comprobante.pdf" download class="btn-print">Descargar comprobante</a>
   </div>
 </body>
 </html>
-
