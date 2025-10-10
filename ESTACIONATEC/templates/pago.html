@@ -162,11 +162,12 @@
 </head>
 <body>
   <div class="sidebar">
-    <button>Perfil</button>
-    <button class="active">Historial de Pagos</button>
-    <button>Carga de Vehículo</button>
-    <button>Pago de Tarjetón</button>
-    <button>Cerrar Sesión</button>
+    <button onclick="window.location.href='{{ url_for('scanner') }}'">🚗 Scanner</button>
+        <button onclick="window.location.href='{{ url_for('perfil') }}'">👤 Perfil</button>
+        <button class="active" onclick="window.location.href='{{ url_for('pago') }}'">💰 Historial de pagos</button>
+        <button onclick="window.location.href='{{ url_for('carga_vehiculo') }}'">🚙 Carga de Vehículo</button>
+        <button onclick="window.location.href='{{ url_for('pago_tarjeton') }}'">📄 Pago de Tarjetón</button>
+        <button onclick="window.location.href='{{ url_for('logout') }}'">🔒 Cerrar Sesión</button>
   </div>
 
   <div class="content">
