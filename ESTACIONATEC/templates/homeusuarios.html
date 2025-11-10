@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ titulo_pagina }}</title>
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       font-family: "Segoe UI", Arial, sans-serif;
@@ -53,7 +56,9 @@
       gap: 10px;
     }
 
-    .sidebar button:hover { background-color: #5b3dafff; }
+    .sidebar button:hover {
+      background-color: #5b3dafff;
+    }
 
     .content {
       flex-grow: 1;
@@ -76,7 +81,7 @@
       width: 100%;
       height: auto;
       border-radius: 15px;
-      box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
       object-fit: cover;
     }
 
@@ -92,7 +97,7 @@
       padding: 10px 20px;
       border-radius: 15px;
       text-align: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     }
 
     @media (max-width: 600px) {
@@ -102,11 +107,19 @@
         justify-content: space-around;
         padding: 15px;
       }
-      .content { padding: 20px; }
-      .overlay-text { font-size: 24px; padding: 10px 15px; }
+
+      .content {
+        padding: 20px;
+      }
+
+      .overlay-text {
+        font-size: 24px;
+        padding: 10px 15px;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="main-container">
     <aside class="sidebar">
@@ -116,16 +129,15 @@
       <button onclick="window.location.href='/carga/vehiculo'">📤Carga de Vehículo</button>
       <button onclick="window.location.href='/pago/vehiculo'">💳 Pago de Tarjeton</button>
       <button onclick="window.location.href='/recibo'">🧾 Voucher</button>
-      <button onclick="window.location.href='{{ url_for('logout') }}';">🔒 Cerrar Sesión</button>
+      <button onclick="window.location.href='{{ url_for(logout) }}'">🔒 Cerrar Sesión</button>
     </aside>
 
     <div class="content">
       <div class="card-image">
         <img src="{{ url_for('static', filename='fondo1.jpg') }}" alt="Imagen de fondo">
         <div class="overlay-text">
-          Bienvenido {{ usuario.nombre_usario}} a Estacionatec
+          Bienvenido {{ usuario.nombre_usuario}} a Estacionatec
         </div>
       </div>
     </div>
   </div>
-
