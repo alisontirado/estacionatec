@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Estacionatec Alumnos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fff;
+    }
+
+header {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;            
+  background-color: #e9c4f7;
+  padding: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+}
+
+header a img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+
+    .main {
+      display: flex;
+    }
+
+    /* Menú lateral */
+    .sidebar {
+      width: 200px;
+      background-color: #e9c4f7;
+      padding-top: 20px;
+      border-right: 1px solid #ccc;
+      border-bottom-left-radius: 30px;
+      height: calc(100vh - 70px);
+    }
+
+    .sidebar button {
+      display: block;
+      width: 90%;
+      margin: 10px auto;
+      padding: 10px;
+      border: none;
+      border-radius: 20px;
+      background-color: #fff;
+      font-size: 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    /* Hover general */
+    .sidebar button:hover {
+      background-color: #f8dff9;
+    }
+
+    /* Botón activo (página seleccionada) */
+    .sidebar button.active {
+      background-color: #e9c4f7;
+      color: #333;
+      font-weight: bold;
+    }
+
+    /* Hover sobre botón activo: quita temporalmente el marcado */
+    .sidebar button.active:hover {
+      background-color: #f8dff9;
+      color: #333;
+    }
+
+    /* Contenido */
+    .content {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .content h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .payment-list {
+      width: 90%;
+      margin: 0 auto;
+    }
+
+    .payment-item {
+      background-color: #d3d3d3;
+      border-radius: 20px;
+      padding: 12px 20px;
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+    }
+
+    .payment-item:nth-child(even) {
+      background-color: #e5e5e5;
+    }
+
+    .print-icon {
+      width: 30px;
+      height: 30px;
+      background-color: #333;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+
+    .print-icon::before {
+      content: "\1F5B6"; /* ícono de impresora */
+      color: white;
+      font-size: 20px;
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .info small {
+      font-weight: normal;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+ <header>
+    Estacionatec Alumnos
+    <!-- Imagen personalizada -->
+    <img src="{{ url_for('static', filename='img1.jpg') }}" alt="logo">
+  </header>
+
+  <div class="main">
+    <!-- Menú lateral -->
+    <div class="sidebar">
+      <button onclick="window.location.href='{{ url_for('perfil') }}'">Perfil</button>
+      <button class="active" onclick="window.location.href='{{ url_for('pago') }}'">Historial de pagos</button>
+      <button onclick="window.location.href='{{ url_for('carga_vehiculo') }}'">Carga de Vehículo</button>
+      <button onclick="window.location.href='{{ url_for('pago_tarjeton') }}'">Pago de Tarjetón</button>
+      <button onclick="window.location.href='{{ url_for('logout') }}'">Cerrar Sesión</button>
+    </div>
+
+    <!-- Contenido -->
+    <div class="content">
+      <h2>Historial de Pagos</h2>
+      <div class="payment-list">
+        {% for recibo, concepto, cantidad, fecha, archivo in pagos %}
+          <div class="payment-item">
+            <div class="info">
+              {{ concepto }} - ${{ cantidad }}
+              <small>Recibo: {{ recibo }}</small>
+              <small>Fecha: {{ fecha.strftime("%d/%m/%Y") }}</small>
+            </div>
+            {% if archivo %}
+              <a href="{{ url_for('static', filename=archivo) }}" download class="print-icon"></a>
+            {% endif %}
+          </div>
+        {% else %}
+          <p style="text-align:center; color: gray;">No tienes pagos registrados.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
