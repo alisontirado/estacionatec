@@ -5,6 +5,8 @@ import random
 import string
 # Configurar Stripe
 
+stripe.api_key = "sk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+STRIPE_PUBLIC_KEY = "pk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
