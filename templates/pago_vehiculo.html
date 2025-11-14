@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>{{ titulo_pagina }}</title>
+  <!-- Stripe.js -->
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      background-color: #eaf7ff;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .main-container {
+      display: flex;
+      flex: 1;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: #342b4f;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sidebar h3 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: normal;
+      color: #cfc6f3;
+    }
+
+    .sidebar button {
+      background-color: #5a4c79;
+      border: none;
+      color: #fff;
+      text-align: left;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: background-color 0.3s ease, color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar button:hover {
+      background-color: #5b3dafff;
+    }
+
+    .content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+      max-width: 500px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #342b4f;
+      font-size: 24px;
+    }
+
+    .payment-info {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .payment-info p {
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    .payment-methods {
+      margin: 20px 0;
+    }
+
+    .payment-method {
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .payment-method:hover {
+      border-color: #5b3dafff;
+      background: #f8f6ff;
+    }
+
+    .payment-method.selected {
+      border-color: #5b3dafff;
+      background: #f0edff;
+    }
+
+    .payment-method input {
+      margin-right: 15px;
+    }
+
+    .payment-method label {
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .payment-details {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 10px;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    .field label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 8px;
+      color: #342b4f;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      background: #fff;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus {
+      outline: none;
+      border-color: #5b3dafff;
+      box-shadow: 0 0 5px rgba(91, 61, 175, 0.3);
+    }
+
+    .card-input {
+      position: relative;
+    }
+
+    .card-icons {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      gap: 5px;
+    }
+
+    .card-icon {
+      width: 30px;
+      height: 20px;
+      background: #f0f0f0;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: bold;
+    }
+
+    .btn-pay {
+      width: 100%;
+      padding: 15px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-top: 20px;
+    }
+
+    .btn-pay:hover {
+      background: #218838;
+      transform: translateY(-2px);
+    }
+
+    .btn-pay:disabled {
+      background: #6c757d;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      margin: 20px 0;
+      padding: 20px;
+    }
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #5b3dafff;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .success-message {
+      background: #d4edda;
+      color: #155724;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      display: none;
+      border-left: 4px solid #28a745;
+    }
+
+    .error-message {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      display: none;
+      border-left: 4px solid #dc3545;
+    }
+
+    .security-notice {
+      background: #fff3cd;
+      color: #856404;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .test-card-notice {
+      background: #d1ecf1;
+      color: #0c5460;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+      font-size: 12px;
+      text-align: center;
+      border-left: 4px solid #17a2b8;
+    }
+
+    @media (max-width: 600px) {
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 15px;
+      }
+
+      .main-container {
+        flex-direction: column;
+      }
+
+      .content {
+        padding: 15px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main-container">
+    <!-- Barra lateral -->
+    <aside class="sidebar">
+      <h3>Menú</h3>
+      <button onclick="window.location.href='/miperfil'">👤 Perfil</button>
+      <button onclick="window.location.href='/resumen/pago'">💳📜 Historial de pagos</button>
+      <button onclick="window.location.href='/carga/vehiculo'">📤 Carga de Vehículo</button>
+      <button onclick="window.location.href='/pago/vehiculo'">💳 Pago de Tarjetón</button>
+      <button onclick="window.location.href='/recibo'">🧾 Voucher</button>
+      <button onclick="window.location.href='/logout'">🔒 Cerrar Sesión</button>
+    </aside>
+
+    <!-- Contenido principal -->
+    <div class="content">
+      <div class="card">
+        <h2>Pago de Tarjetón</h2>
+
+        <!-- Mensajes -->
+        <div class="success-message" id="successMessage">
+          <strong>¡Pago realizado exitosamente!</strong><br>
+          Redirigiendo a tu recibo...
+        </div>
+
+        <div class="error-message" id="errorMessage">
+          <strong>Error en el pago</strong><br>
+          <span id="errorText">Por favor, intenta nuevamente.</span>
+        </div>
+
+        <!-- Información del pago -->
+        <div class="payment-info">
+          <p><strong>Concepto:</strong> Tarjetón de Estacionamiento</p>
+          <p><strong>Vigencia:</strong> 1 Mes</p>
+          <p><strong>Monto:</strong> $150.00 MXN</p>
+          <p><strong>Beneficios:</strong> Acceso ilimitado al estacionamiento</p>
+        </div>
+
+        <!-- Métodos de pago -->
+        <div class="payment-methods">
+          <h3>Selecciona método de pago</h3>
+
+          <div class="payment-method" onclick="selectPaymentMethod('tarjeta')">
+            <input type="radio" name="paymentMethod" value="tarjeta" id="tarjeta">
+            <label for="tarjeta">💳 Tarjeta de Crédito/Débito</label>
+          </div>
+
+          <div class="payment-method" onclick="selectPaymentMethod('transferencia')">
+            <input type="radio" name="paymentMethod" value="transferencia" id="transferencia">
+            <label for="transferencia">🏦 Transferencia Bancaria</label>
+          </div>
+
+          <div class="payment-method" onclick="selectPaymentMethod('paypal')">
+            <input type="radio" name="paymentMethod" value="paypal" id="paypal">
+            <label for="paypal">🔵 PayPal</label>
+          </div>
+        </div>
+
+        <!-- Formulario de tarjeta -->
+        <div class="payment-details" id="cardDetails">
+          <h3>Información de la Tarjeta</h3>
+          <form id="cardForm">
+            <div class="field">
+              <label for="cardNumber">Número de Tarjeta</label>
+              <div class="card-input">
+                <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                <div class="card-icons">
+                  <div class="card-icon">VISA</div>
+                  <div class="card-icon">MC</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="cardName">Nombre en la Tarjeta</label>
+              <input type="text" id="cardName" placeholder="JUAN PEREZ" required>
+            </div>
+
+            <div style="display: flex; gap: 15px;">
+              <div class="field" style="flex: 1;">
+                <label for="expiryDate">Fecha de Expiración</label>
+                <input type="text" id="expiryDate" placeholder="MM/AA" maxlength="5" required>
+              </div>
+
+              <div class="field" style="flex: 1;">
+                <label for="cvv">CVV</label>
+                <input type="text" id="cvv" placeholder="123" maxlength="3" required>
+              </div>
+            </div>
+          </form>
+          <div class="security-notice">
+            🔒 Tus datos de tarjeta se procesan de forma segura con Stripe
+          </div>
+          <div class="test-card-notice" id="testCardNotice">
+            💳 <strong>Modo Prueba:</strong> Usa 4242 4242 4242 4242 para pagos exitosos
+          </div>
+        </div>
+
+        <!-- Información de transferencia -->
+        <div class="payment-details" id="transferDetails">
+          <h3>Información para Transferencia</h3>
+          <div class="payment-info">
+            <p><strong>Banco:</strong> BBVA</p>
+            <p><strong>CLABE:</strong> 012 180 001 234 567 890</p>
+            <p><strong>Beneficiario:</strong> INSTITUTO TECNOLÓGICO</p>
+            <p><strong>Concepto:</strong> Tarjetón - {{ usuario.nombre_usuario if usuario else 'Usuario' }}</p>
+            <p><strong>Monto:</strong> $150.00 MXN</p>
+          </div>
+          <p style="color: #666; font-size: 14px; margin-top: 15px;">
+            Una vez realizada la transferencia, envía el comprobante a: pagos@estacionatec.edu.mx
+          </p>
+        </div>
+
+        <!-- Información de PayPal -->
+        <div class="payment-details" id="paypalDetails">
+          <h3>Pago con PayPal</h3>
+          <p>Serás redirigido a PayPal para completar tu pago de manera segura.</p>
+          <button type="button" class="btn-pay" onclick="processPayPalPayment()">
+            🔵 Pagar con PayPal - $150.00 MXN
+          </button>
+        </div>
+
+        <!-- Botón de pago general -->
+        <button class="btn-pay" id="payButton" onclick="processPayment()" disabled>
+          💳 Realizar Pago - $150.00 MXN
+        </button>
+
+        <!-- Loading -->
+        <div class="loading" id="loading">
+          <div class="spinner"></div>
+          <p><strong>Procesando pago...</strong></p>
+          <p>Por favor, no cierres esta ventana.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Configurar Stripe con tu clave pública REAL
+    const stripe = Stripe('pk_test_51STGYY5Ak2FxJzakJeRuygn7ab4A54DqU6x3xGMOha0IRwSiz8IMG9StemBG4BQttJ01he9ILAFWReLVtUmrXZ5C00hoCddstU');
+
+    let selectedMethod = '';
+
+    function selectPaymentMethod(method) {
+      selectedMethod = method;
+
+      // Actualizar selección visual
+      document.querySelectorAll('.payment-method').forEach(el => {
+        el.classList.remove('selected');
+      });
+      event.currentTarget.classList.add('selected');
+
+      // Actualizar radio button
+      document.getElementById(method).checked = true;
+
+      // Mostrar detalles del método seleccionado
+      document.querySelectorAll('.payment-details').forEach(el => {
+        el.style.display = 'none';
+      });
+
+      if (method === 'tarjeta') {
+        document.getElementById('cardDetails').style.display = 'block';
+        document.getElementById('payButton').style.display = 'block';
+      } else if (method === 'transferencia') {
+        document.getElementById('transferDetails').style.display = 'block';
+        document.getElementById('payButton').style.display = 'block';
+      } else if (method === 'paypal') {
+        document.getElementById('paypalDetails').style.display = 'block';
+        document.getElementById('payButton').style.display = 'none';
+      }
+
+      // Habilitar botón de pago (excepto para PayPal que tiene su propio botón)
+      if (method !== 'paypal') {
+        document.getElementById('payButton').disabled = false;
+      }
+
+      // Ocultar mensajes anteriores
+      hideMessages();
+    }
+
+    function hideMessages() {
+      document.getElementById('successMessage').style.display = 'none';
+      document.getElementById('errorMessage').style.display = 'none';
+    }
+
+    function processPayment() {
+      if (!selectedMethod) {
+        showError('Por favor, selecciona un método de pago.');
+        return;
+      }
+
+      if (selectedMethod === 'tarjeta') {
+        processCardPayment();
+      } else if (selectedMethod === 'transferencia') {
+        processTransferPayment();
+      }
+    }
+
+    async function processCardPayment() {
+      // Validar formulario de tarjeta
+      const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+      const cardName = document.getElementById('cardName').value;
+      const expiryDate = document.getElementById('expiryDate').value;
+      const cvv = document.getElementById('cvv').value;
+
+      if (!cardNumber || !cardName || !expiryDate || !cvv) {
+        showError('Por favor, completa toda la información de la tarjeta.');
+        return;
+      }
+
+      // Validar formato de fecha
+      if (!/^\d{2}\/\d{2}$/.test(expiryDate)) {
+        showError('Formato de fecha inválido. Usa MM/AA (ej: 12/25)');
+        return;
+      }
+
+      // Validar CVV
+      if (!/^\d{3,4}$/.test(cvv)) {
+        showError('CVV inválido. Debe tener 3 o 4 dígitos.');
+        return;
+      }
+
+      // Validar número de tarjeta (mínimo 13 dígitos)
+      if (cardNumber.replace(/\s/g, '').length < 13) {
+        showError('Número de tarjeta inválido.');
+        return;
+      }
+
+      // Mostrar loading
+      showLoading(true);
+
+      try {
+        // Extraer mes y año de expiración
+        const [expMonth, expYear] = expiryDate.split('/');
+
+        console.log('Creando token de Stripe...');
+        console.log('Número:', cardNumber.replace(/\s/g, ''));
+        console.log('Nombre:', cardName);
+        console.log('Expira:', expMonth, '/', '20' + expYear);
+
+        // Crear token de pago con Stripe
+        const { token, error } = await stripe.createToken('card', {
+          number: cardNumber,
+          name: cardName,
+          exp_month: expMonth,
+          exp_year: '20' + expYear,
+          cvc: cvv
+        });
+
+        if (error) {
+          console.error('Error de Stripe:', error);
+          throw new Error(error.message);
+        }
+
+        console.log('✅ Token creado exitosamente:', token.id);
+
+        // Enviar token al servidor
+        const response = await fetch('/procesar_pago', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            metodo: 'tarjeta',
+            monto: 150.00,
+            concepto: 'Tarjetón de Estacionamiento',
+            stripe_token: token.id
+          })
+        });
+
+        const data = await response.json();
+
+        console.log('Respuesta del servidor:', data);
+        showLoading(false);
+
+        if (data.success) {
+          showSuccess();
+          setTimeout(() => {
+            window.location.href = `/recibo?pago_id=${data.pago_id}&recibo=${data.numero_recibo}&metodo=tarjeta`;
+          }, 2000);
+        } else {
+          showError(data.error || 'Error al procesar el pago');
+          enablePayButton();
+        }
+      } catch (error) {
+        console.error('Error en el proceso de pago:', error);
+        showLoading(false);
+        showError(error.message);
+        enablePayButton();
+      }
+    }
+
+    function processTransferPayment() {
+      showLoading(true);
+
+      // Para transferencias, marcamos como pendiente
+      fetch('/procesar_pago', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          metodo: 'transferencia',
+          monto: 150.00,
+          concepto: 'Tarjetón de Estacionamiento'
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          showLoading(false);
+
+          if (data.success) {
+            showSuccess();
+            setTimeout(() => {
+              window.location.href = `/recibo?pago_id=${data.pago_id}&recibo=${data.numero_recibo}&metodo=transferencia`;
+            }, 2000);
+          } else {
+            showError(data.error || 'Error al registrar la transferencia');
+            enablePayButton();
+          }
+        })
+        .catch(error => {
+          showLoading(false);
+          showError('Error de conexión. Intenta nuevamente.');
+          enablePayButton();
+        });
+    }
+
+    function processPayPalPayment() {
+      showLoading(true);
+
+      // Simular redirección a PayPal (en producción esto redirigiría a PayPal)
+      setTimeout(() => {
+        fetch('/procesar_pago', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            metodo: 'paypal',
+            monto: 150.00,
+            concepto: 'Tarjetón de Estacionamiento'
+          })
+        })
+          .then(response => response.json())
+          .then(data => {
+            showLoading(false);
+
+            if (data.success) {
+              showSuccess();
+              setTimeout(() => {
+                window.location.href = `/recibo?pago_id=${data.pago_id}&recibo=${data.numero_recibo}&metodo=paypal`;
+              }, 2000);
+            } else {
+              showError(data.error || 'Error al procesar pago con PayPal');
+            }
+          })
+          .catch(error => {
+            showLoading(false);
+            showError('Error de conexión con PayPal');
+          });
+      }, 3000);
+    }
+
+    // Funciones auxiliares
+    function showLoading(show) {
+      document.getElementById('loading').style.display = show ? 'block' : 'none';
+      document.getElementById('payButton').disabled = show;
+    }
+
+    function showSuccess() {
+      document.getElementById('successMessage').style.display = 'block';
+      document.getElementById('errorMessage').style.display = 'none';
+    }
+
+    function showError(message) {
+      document.getElementById('errorText').textContent = message;
+      document.getElementById('errorMessage').style.display = 'block';
+      document.getElementById('successMessage').style.display = 'none';
+    }
+
+    function enablePayButton() {
+      document.getElementById('payButton').disabled = false;
+    }
+
+    // Formatear número de tarjeta
+    document.getElementById('cardNumber').addEventListener('input', function (e) {
+      let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+      let formattedValue = value.match(/.{1,4}/g)?.join(' ');
+      e.target.value = formattedValue || value;
+    });
+
+    // Formatear fecha de expiración
+    document.getElementById('expiryDate').addEventListener('input', function (e) {
+      let value = e.target.value.replace(/\//g, '');
+      if (value.length >= 2) {
+        e.target.value = value.slice(0, 2) + '/' + value.slice(2, 4);
+      }
+    });
+
+    // Validar que solo números en CVV
+    document.getElementById('cvv').addEventListener('input', function (e) {
+      e.target.value = e.target.value.replace(/[^0-9]/g, '');
+    });
+
+    // Validar que solo números en tarjeta
+    document.getElementById('cardNumber').addEventListener('input', function (e) {
+      e.target.value = e.target.value.replace(/[^0-9\s]/g, '');
+    });
+
+    // Validar nombre (solo letras y espacios)
+    document.getElementById('cardName').addEventListener('input', function (e) {
+      e.target.value = e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+    });
+
+    // Auto-completar datos de prueba en desarrollo
+    function fillTestCard() {
+      // Solo en entorno de desarrollo
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        document.getElementById('cardNumber').value = '4242 4242 4242 4242';
+        document.getElementById('cardName').value = 'TARJETA PRUEBA';
+        document.getElementById('expiryDate').value = '12/28';
+        document.getElementById('cvv').value = '123';
+
+        console.log('✅ Datos de prueba cargados para desarrollo');
+        console.log('💳 Tarjeta: 4242 4242 4242 4242');
+        console.log('📅 Fecha: 12/28');
+        console.log('🔒 CVV: 123');
+        console.log('🏦 Stripe conectado con tu cuenta');
+      }
+    }
+
+    // Ejecutar al cargar la página (solo en desarrollo)
+    document.addEventListener('DOMContentLoaded', function () {
+      fillTestCard();
+
+      // Mostrar notificación de modo prueba
+      console.log('🚀 Stripe configurado correctamente');
+      console.log('🔑 Clave pública:', 'pk_test_51STGYY5Ak2FxJzakJeRuygn7ab4A54DqU6x3xGMOha0IRwSiz8IMG9StemBG4BQttJ01he9ILAFWReLVtUmrXZ5C00hoCddstU');
+    });
+  </script>
+</body>
+
+</html>

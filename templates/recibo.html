@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Recibo - {{ titulo_pagina }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+
+        .voucher {
+            border: 2px solid #000;
+            padding: 30px;
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 15px;
+        }
+
+        .info {
+            margin: 15px 0;
+        }
+
+        .info p {
+            margin: 8px 0;
+            padding: 8px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .btn-print {
+            display: block;
+            width: 200px;
+            margin: 25px auto;
+            padding: 12px;
+            text-align: center;
+            background-color: #5b3dafff;
+            color: white;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-print:hover {
+            background-color: #4a2f9aff;
+        }
+
+        .estado-completado {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .estado-pendiente {
+            color: #ffc107;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="voucher">
+        <div class="header">
+            <h2>EstacionaTec</h2>
+            <h3>Comprobante de Pago</h3>
+        </div>
+        <div class="info">
+            <p><strong>Usuario:</strong> {{ usuario.nombre_usuario }}</p>
+            <p><strong>Fecha:</strong> {{ fecha_actual }}</p>
+            <p><strong>Concepto:</strong> Tarjetón de Estacionamiento - 1 Mes</p>
+            <p><strong>Monto:</strong> $150.00 MXN</p>
+            <p><strong>Número de Recibo:</strong> {{ request.args.get('recibo', 'REC-' ~ fecha_actual.replace('/',
+                '').replace(' ', '').replace(':', '')) }}</p>
+            <p><strong>Estado:</strong> <span class="estado-completado">Pagado</span></p>
+            <p><strong>Método de Pago:</strong> {{ request.args.get('metodo', 'Tarjeta') }}</p>
+        </div>
+        <p style="text-align: center; margin-top: 30px; color: #666;">
+            Este comprobante sirve como justificante de pago del tarjetón de estacionamiento.
+        </p>
+
+        <button class="btn-print" onclick="window.print()">🖨️ Imprimir Comprobante</button>
+        <button class="btn-print" onclick="window.location.href='/miperfil'" style="background: #6c757d;">📋 Volver al
+            Perfil</button>
+    </div>
+
+    <script>
+        // Opcional: Agregar funcionalidad de impresión mejorada
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const pagoId = urlParams.get('pago_id');
+
+            if (pagoId) {
+                // Podrías hacer una llamada a la API para obtener detalles específicos del pago
+                console.log('Cargando detalles del pago:', pagoId);
+            }
+        });
+    </script>
+</body>
+
+</html>

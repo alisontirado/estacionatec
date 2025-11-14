@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>{{ titulo_pagina }}</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      background-color: #eaf7ff;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .main-container {
+      display: flex;
+      flex: 1;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: #342b4f;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sidebar h3 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: normal;
+      color: #cfc6f3;
+    }
+
+    .sidebar button {
+      background-color: #5a4c79;
+      border: none;
+      color: #fff;
+      text-align: left;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: background-color 0.3s ease, color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar button:hover {
+      background-color: #5b3dafff;
+    }
+
+    .content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+      max-width: 600px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #342b4f;
+      font-size: 24px;
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    .field label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 8px;
+      color: #342b4f;
+    }
+
+    input[type="text"],
+    input[type="file"],
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      background: #f9f9f9;
+    }
+
+    input[type="text"]:focus,
+    select:focus {
+      outline: none;
+      border-color: #5b3dafff;
+      background: #fff;
+    }
+
+    .btn-container {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 25px;
+    }
+
+    .btn {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: #5b3dafff;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #4a2f9aff;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: #fff;
+      border: 2px solid #5b3dafff;
+      color: #5b3dafff;
+    }
+
+    .btn-outline:hover {
+      background: #5b3dafff;
+      color: white;
+    }
+
+    #qr-container {
+      text-align: center;
+      margin-top: 30px;
+      padding: 20px;
+      background: #f9f9f9;
+      border-radius: 15px;
+      border: 2px dashed #ccc;
+    }
+
+    #qr-image {
+      max-width: 200px;
+      border: 4px solid #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .file-info {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .success-message {
+      background: #d4edda;
+      color: #155724;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 15px;
+      }
+
+      .main-container {
+        flex-direction: column;
+      }
+
+      .content {
+        padding: 15px;
+      }
+
+      .btn-container {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main-container">
+    <!-- Barra lateral -->
+    <aside class="sidebar">
+      <h3>Menú</h3>
+      <button onclick="window.location.href='/miperfil'">👤 Perfil</button>
+      <button onclick="window.location.href='/resumen/pago'">💳📜 Historial de pagos</button>
+      <button onclick="window.location.href='/carga/vehiculo'">📤 Carga de Vehículo</button>
+      <button onclick="window.location.href='/pago/vehiculo'">💳 Pago de Tarjetón</button>
+      <button onclick="window.location.href='/recibo'">🧾 Voucher</button>
+      <button onclick="window.location.href='/logout'">🔒 Cerrar Sesión</button>
+    </aside>
+
+    <!-- Contenido principal -->
+    <div class="content">
+      <div class="card">
+        <h2>Carga de Vehículo</h2>
+
+        <!-- Mensaje de éxito -->
+        <div class="success-message" id="successMessage">
+          ¡Vehículo registrado exitosamente! Se ha generado tu código QR.
+        </div>
+
+        <!-- FORMULARIO -->
+        <form id="formulario" action="/guardar_vehiculo" method="POST" enctype="multipart/form-data">
+          <!-- Tipo -->
+          <div class="field">
+            <label for="tipo">Tipo de Vehículo *</label>
+            <select name="tipo" id="tipo" required>
+              <option value="">Seleccione el tipo de vehículo...</option>
+              <option value="Moto">Moto</option>
+              <option value="Auto">Auto</option>
+              <option value="Camioneta">Camioneta</option>
+            </select>
+          </div>
+
+          <!-- Placa -->
+          <div class="field">
+            <label for="placa">Placa *</label>
+            <input type="text" name="placa" id="placa" placeholder="Ej: ABC123" required>
+          </div>
+
+          <!-- Nombre del conductor -->
+          <div class="field">
+            <label for="nombre">Nombre del Conductor *</label>
+            <input type="text" name="nombre" id="nombre" placeholder="Nombre completo" required>
+          </div>
+
+          <!-- Foto del Vehículo -->
+          <div class="field">
+            <label for="vehiculo">Foto del Vehículo *</label>
+            <input type="file" name="vehiculo" id="vehiculo" accept="image/*" required>
+            <div class="file-info">Formatos permitidos: JPG, PNG, GIF (Máx. 5MB)</div>
+          </div>
+
+          <!-- Identificación oficial -->
+          <div class="field">
+            <label for="id">Identificación Oficial *</label>
+            <input type="file" name="id" id="id" accept="image/*" required>
+            <div class="file-info">INE, Pasaporte o Licencia de conducir</div>
+          </div>
+
+          <!-- Tarjeta de circulación -->
+          <div class="field">
+            <label for="tarjeta">Tarjeta de Circulación *</label>
+            <input type="file" name="tarjeta" id="tarjeta" accept="image/*" required>
+            <div class="file-info">Documento oficial del vehículo</div>
+          </div>
+
+          <!-- Botones -->
+          <div class="btn-container">
+            <button type="submit" class="btn btn-primary">🚗 Guardar Vehículo</button>
+            <button type="reset" class="btn btn-outline">🗑️ Limpiar Formulario</button>
+          </div>
+        </form>
+
+        <!-- Contenedor del QR -->
+        <div id="qr-container">
+          <h3 style="margin-bottom: 15px; color: #342b4f;">Tu Código QR</h3>
+          <p style="color: #666; margin-bottom: 15px;">Este código será escaneado por los vigilantes</p>
+          <img id="qr-image" src="" alt="Código QR del vehículo">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('formulario');
+    const qrImage = document.getElementById('qr-image');
+    const successMessage = document.getElementById('successMessage');
+    const qrContainer = document.getElementById('qr-container');
+
+    // Ocultar el contenedor QR inicialmente
+    qrContainer.style.display = 'none';
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Validar formulario
+      const tipo = document.getElementById('tipo').value;
+      const placa = document.getElementById('placa').value;
+      const nombre = document.getElementById('nombre').value;
+
+      if (!tipo || !placa || !nombre) {
+        alert('Por favor, completa todos los campos obligatorios.');
+        return;
+      }
+
+      // Mostrar mensaje de éxito
+      successMessage.style.display = 'block';
+
+      // Generar datos para el QR
+      const data = `Vehículo: ${tipo} | Placa: ${placa} | Conductor: ${nombre}`;
+
+      // Generar QR usando API
+      qrImage.src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
+        encodeURIComponent(data);
+
+      // Mostrar contenedor QR
+      qrContainer.style.display = 'block';
+
+      // Desplazarse hacia el QR
+      qrContainer.scrollIntoView({ behavior: 'smooth' });
+
+      // Enviar formulario después de 2 segundos (simulación)
+      setTimeout(() => {
+        // Aquí puedes enviar el formulario real si quieres
+        // form.submit();
+
+        // Por ahora solo mostramos el mensaje de éxito
+        console.log('Vehículo registrado:', { tipo, placa, nombre });
+      }, 2000);
+    });
+
+    // Limpiar formulario
+    form.addEventListener('reset', function () {
+      qrContainer.style.display = 'none';
+      successMessage.style.display = 'none';
+      qrImage.src = '';
+    });
+
+    // Validación en tiempo real para la placa
+    document.getElementById('placa').addEventListener('input', function (e) {
+      this.value = this.value.toUpperCase();
+    });
+  </script>
+</body>
+
+</html>
