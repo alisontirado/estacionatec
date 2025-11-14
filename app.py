@@ -4,8 +4,6 @@ import stripe
 import random
 import string
 # Configurar Stripe
-stripe.api_key = "sk_test_51STGYY5Ak2FxJzakm7ztRV7G6Z96F06uETQKe45zIsttD6urDns10728K22Bgoo95439V3EK84E8Yrj9ptLt1S2z00Hbw0AfHh"  # Cambia por tu clave real
-STRIPE_PUBLIC_KEY = "pk_test_51STGYY5Ak2FxJzakJeRuygn7ab4A54DqU6x3xGMOha0IRwSiz8IMG9StemBG4BQttJ01he9ILAFWReLVtUmrXZ5C00hoCddstU"  # Para el frontend
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_admin import Admin
